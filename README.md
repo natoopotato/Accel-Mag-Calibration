@@ -14,12 +14,12 @@ The test data is from Michael Wronas and is available
 
 ## Usage
 
-Build and run. You will be prompted for field magnitude and file name.  
+Build and run. You will be prompted for field magnitude and file name.
 
 You can include relative path names to the data files.
 Data files should be three column comma delineated with x y z data. See example data from Michael Wronas.
 
-For accelerometer readings measured in G it would be 1 for field magnitude. 
+For accelerometer readings measured in G it would be 1 for field magnitude.
 
 
 
@@ -171,10 +171,10 @@ V =
 1. Translate the ellipsoid to the origin.
 2. Align the principal axis of the ellipsoid with the coordinate axis.
 3. Scale the pricipal axis of the ellipsoid to the unit sphere.
-4. Rotate back the sphere to hte original orientation of the ellipsoid.
+4. Rotate back the sphere to the original orientation of the ellipsoid.
 5. Scale the sphere to the unit sphere. i.e. scale to magnitude of 1. Can also be used to scale to a different radius $R$.
 
-For any point $\mathrm{x}(x, y, z) $ on the ellipsoid.
+For any point $`\mathrm{x}(x, y, z)`$ on the ellipsoid.
 
 ```math
 \begin{bmatrix}
@@ -201,7 +201,7 @@ z - b_z
 Where $` \textbf{B} `$ is the bias matrix.
 
 Step 2. The principal axis of the ellipsoid are alligned with the $x,y,z$ axis of the reference frame. This corresponds to applying an inverse rotation by V, that is $V^T$ or $V^{-1}$[^1].
-[^1]: This is because the rotation matrix is a square orthogonal matrix, that is $V^{-1} = V^T$c
+[^1]: This is because the rotation matrix is a square orthogonal matrix, that is $`V^{-1} = V^T`$c
 
 ```math
 \begin{bmatrix}

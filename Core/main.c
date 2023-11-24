@@ -2,8 +2,10 @@
 #include <stdlib.h>
 #include <math.h>
 #include "mathlib.h"
+#include <unistd.h> // for getopt
 
-int main() {
+
+int main(int argc, char *argv[]) {
     int nlines = 0;
     char buf[120];
     double *D, *S, *C, *S11, *S12, *S12t, *S22, *S22_1, *S22a, *S22b, *SS, *E, *d, *U, *SSS;
@@ -13,25 +15,46 @@ int main() {
     double maxval, norm, btqb, *eigen_real3, *eigen_imag3, *Dz, *vdz, *SQ, *A_1, hm, norm1, norm2, norm3;
     double x, y, z;
 
-// -------------------------------------------------------
-    // User input
-    // Ask user for magnitude
-    // Prompt the user to enter a double value.
-    printf("Enter field magnitude: ");
+    // Default values
+    double magnitude = 1.0;
+    char *filename = "../data.txt";
 
-    // Use scanf to read the double value from the user.
-    if (scanf("%lf", &hm) == 1) {
-        // The %lf format specifier is used to read a double value.
-        printf("Field Magnitude: %lf\n", hm);
-    } else {
-        printf("Invalid input. Please enter a valid double value.\n");
-        return 1; // Return an error code
+
+    char *strtodptr;
+    // Parse command-line arguments
+    int opt;
+
+    // Add 'h' to the getopt function call
+    while ((opt = getopt(argc, argv, "m:f:h")) != -1) {
+        switch (opt) {
+            case 'm':
+                magnitude = strtod(optarg, &strtodptr);
+                if (*strtodptr != '\0') {
+                    printf("Invalid magnitude. Usage: %s -m <magnitude> -f <filename> -h <help>\n", argv[0]);
+                    return 1; // Return an error code
+                }
+                break;
+            case 'f':
+                filename = optarg;
+                break;
+            case 'h': // Display help message
+                printf("\nUsage: %s -m <magnitude> -f <filename> -h\n", argv[0]);
+                printf("\nOptions:\n");
+                printf("  -m <magnitude>   Specify the magnitude (floating-point number)\n");
+                printf("  -f <filename>    Specify the filename for processing\n");
+                printf("  -h               Display this help message\n");
+                return 0; // Return a success code
+
+            default:
+                printf("Invalid option. Usage: %s -m <magnitude> -f <filename> -h <help>\n", argv[0]);
+                return 1; // Return an error code
+        }
     }
-    char filename[100]; // Buffer to store the filename
-    FILE *fp; // File pointer
 
-    printf("Enter the filename to open: ");
-    scanf("%s", filename);
+
+    // Print the parsed values
+    printf("Magnitude: %lf\n", magnitude);
+    printf("Filename: %s\n", filename);
 
     // Open the user-specified file for reading
     fp = fopen(filename, "r");
@@ -39,6 +62,7 @@ int main() {
     // Check if the file was opened successfully
     if (fp == NULL) {
         printf("Unable to open the file.\n");
+        printf("File opened: %s\n", filename);
         return 1; // Return an error code
     }
 // -------------------------------------------------------
