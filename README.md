@@ -9,7 +9,7 @@ With the help of wayback and some other sources I have been able to recover the 
 The test data is from Michael Wronas and is available
 ![here](https://github.com/michaelwro/accelerometer-calibration/tree/main). Also see for more information on implementation.
 
-
+He also has a good ![video](https://youtu.be/-1tmYPE7MAQ) about this.
 
 
 ## Usage
