@@ -4,15 +4,16 @@
 #include "mathlib.h"
 #include <unistd.h> // for getopt
 
+#define BUFLEN 120
 
 int main(int argc, char *argv[]) {
     int nlines = 0;
-    char buf[120];
+    char buf[BUFLEN];
     double *D, *S, *C, *S11, *S12, *S12t, *S22, *S22_1, *S22a, *S22b, *SS, *E, *d, *U, *SSS;
     double *eigen_real, *eigen_imag, *v1, *v2, *v, *Q, *Q_1, *B, *QB, J, hmb, *SSSS;
     int *p;
     int i, index;
-    double maxval, norm, btqb, *eigen_real3, *eigen_imag3, *Dz, *vdz, *SQ, *A_1, hm, norm1, norm2, norm3;
+    double maxval, norm, btqb, *eigen_real3, *eigen_imag3, *Dz, *vdz, *SQ, *A_1, norm1, norm2, norm3;
     double x, y, z;
 
     // Default values
@@ -24,6 +25,7 @@ int main(int argc, char *argv[]) {
     // Parse command-line arguments
     int opt;
 
+    FILE *fp;
     // Add 'h' to the getopt function call
     while ((opt = getopt(argc, argv, "m:f:h")) != -1) {
         switch (opt) {
@@ -69,13 +71,15 @@ int main(int argc, char *argv[]) {
 
 
 
-    while (fgets(buf, 200, fp) != NULL)
+    while (fgets(buf, BUFLEN, fp) != NULL)
         nlines++;
     rewind(fp);
 
+    printf("Found %d measurements\n", nlines);
+    
     D = (double *) malloc(10 * nlines * sizeof(double));
     for (i = 0; i < nlines; i++) {
-        fgets(buf, 100, fp);
+        fgets(buf, BUFLEN, fp);
         sscanf(buf, "%lf\t%lf\t%lf", &x, &y, &z);
         D[i] = x * x;
         D[nlines + i] = y * y;
@@ -309,11 +313,14 @@ int main(int argc, char *argv[]) {
     SQ = (double *) malloc(3 * 3 * sizeof(double));
     Multiply_Matrices(SQ, vdz, 3, 3, SSSS, 3);
 
+    
     A_1 = (double *) malloc(3 * 3 * sizeof(double));
 
     //Print Soft iron / distortion matrix
-    for (i = 0; i < 9; i++)
-        A_1[i] = SQ[i] * hm / hmb;
+
+    for (i = 0; i < 9; i++) 
+      A_1[i] = SQ[i] * magnitude / hmb;
+    
     for (i = 0; i < 3; i++)
         printf("%lf %lf %lf\r\n", A_1[i * 3], A_1[i * 3 + 1], A_1[i * 3 + 2]);
 
